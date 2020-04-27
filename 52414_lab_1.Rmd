@@ -37,12 +37,7 @@ Please write your code in a clear and concise way, with an emphasis on reproduci
 
 <br/><br/>
   
-The only allowed libraries are the following (**please do not add your own**):
-```{r, include=FALSE}
-library('tidyverse')
-library(data.table)
-```  
-<br/><br/>
+
 
 ## A Deeper Dive Into John's Hopkins Corona Database         
     
@@ -68,8 +63,68 @@ d. Using the last day of March as a reference, create a single stacked bar-plot 
   
 **Solution:**  
 
-YOUR SOLUTION HERE.
-Use code blocks and markdown to clearly communicate your work. 
+```{r}
+library('tidyverse')
+library('data.table')
+
+
+confirmed.global.narrow <- read.csv(url("https://data.humdata.org/hxlproxy/data/download/time_series_covid19_confirmed_global_narrow.csv?dest=data_edit&filter01=merge&merge-url01=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTglKQRXpkKSErDiWG6ycqEth32MY0reMuVGhaslImLjfuLU0EUgyyu2e-3vKDArjqGX7dXEBV8FJ4f%2Fpub%3Fgid%3D1326629740%26single%3Dtrue%26output%3Dcsv&merge-keys01=%23country%2Bname&merge-tags01=%23country%2Bcode%2C%23region%2Bmain%2Bcode%2C%23region%2Bsub%2Bcode%2C%23region%2Bintermediate%2Bcode&filter02=merge&merge-url02=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTglKQRXpkKSErDiWG6ycqEth32MY0reMuVGhaslImLjfuLU0EUgyyu2e-3vKDArjqGX7dXEBV8FJ4f%2Fpub%3Fgid%3D398158223%26single%3Dtrue%26output%3Dcsv&merge-keys02=%23adm1%2Bname&merge-tags02=%23country%2Bcode%2C%23region%2Bmain%2Bcode%2C%23region%2Bsub%2Bcode%2C%23region%2Bintermediate%2Bcode&merge-replace02=on&merge-overwrite02=on&filter03=explode&explode-header-att03=date&explode-value-att03=value&filter04=rename&rename-oldtag04=%23affected%2Bdate&rename-newtag04=%23date&rename-header04=Date&filter05=rename&rename-oldtag05=%23affected%2Bvalue&rename-newtag05=%23affected%2Binfected%2Bvalue%2Bnum&rename-header05=Value&filter06=clean&clean-date-tags06=%23date&filter07=sort&sort-tags07=%23date&sort-reverse07=on&filter08=sort&sort-tags08=%23country%2Bname%2C%23adm1%2Bname&tagger-match-all=on&tagger-default-tag=%23affected%2Blabel&tagger-01-header=province%2Fstate&tagger-01-tag=%23adm1%2Bname&tagger-02-header=country%2Fregion&tagger-02-tag=%23country%2Bname&tagger-03-header=lat&tagger-03-tag=%23geo%2Blat&tagger-04-header=long&tagger-04-tag=%23geo%2Blon&header-row=1&url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv"), comment.char= "#")
+
+deaths.global.narrow <- read.csv(url("https://data.humdata.org/hxlproxy/data/download/time_series_covid19_deaths_global_narrow.csv?dest=data_edit&filter01=merge&merge-url01=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTglKQRXpkKSErDiWG6ycqEth32MY0reMuVGhaslImLjfuLU0EUgyyu2e-3vKDArjqGX7dXEBV8FJ4f%2Fpub%3Fgid%3D1326629740%26single%3Dtrue%26output%3Dcsv&merge-keys01=%23country%2Bname&merge-tags01=%23country%2Bcode%2C%23region%2Bmain%2Bcode%2C%23region%2Bsub%2Bcode%2C%23region%2Bintermediate%2Bcode&filter02=merge&merge-url02=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTglKQRXpkKSErDiWG6ycqEth32MY0reMuVGhaslImLjfuLU0EUgyyu2e-3vKDArjqGX7dXEBV8FJ4f%2Fpub%3Fgid%3D398158223%26single%3Dtrue%26output%3Dcsv&merge-keys02=%23adm1%2Bname&merge-tags02=%23country%2Bcode%2C%23region%2Bmain%2Bcode%2C%23region%2Bsub%2Bcode%2C%23region%2Bintermediate%2Bcode&merge-replace02=on&merge-overwrite02=on&filter03=explode&explode-header-att03=date&explode-value-att03=value&filter04=rename&rename-oldtag04=%23affected%2Bdate&rename-newtag04=%23date&rename-header04=Date&filter05=rename&rename-oldtag05=%23affected%2Bvalue&rename-newtag05=%23affected%2Binfected%2Bvalue%2Bnum&rename-header05=Value&filter06=clean&clean-date-tags06=%23date&filter07=sort&sort-tags07=%23date&sort-reverse07=on&filter08=sort&sort-tags08=%23country%2Bname%2C%23adm1%2Bname&tagger-match-all=on&tagger-default-tag=%23affected%2Blabel&tagger-01-header=province%2Fstate&tagger-01-tag=%23adm1%2Bname&tagger-02-header=country%2Fregion&tagger-02-tag=%23country%2Bname&tagger-03-header=lat&tagger-03-tag=%23geo%2Blat&tagger-04-header=long&tagger-04-tag=%23geo%2Blon&header-row=1&url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_deaths_global.csv"), comment.char= "#")
+
+recovered.global.narrow <- read.csv(url("https://data.humdata.org/hxlproxy/data/download/time_series_covid19_recovered_global_narrow.csv?dest=data_edit&filter01=merge&merge-url01=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTglKQRXpkKSErDiWG6ycqEth32MY0reMuVGhaslImLjfuLU0EUgyyu2e-3vKDArjqGX7dXEBV8FJ4f%2Fpub%3Fgid%3D1326629740%26single%3Dtrue%26output%3Dcsv&merge-keys01=%23country%2Bname&merge-tags01=%23country%2Bcode%2C%23region%2Bmain%2Bcode%2C%23region%2Bsub%2Bcode%2C%23region%2Bintermediate%2Bcode&filter02=merge&merge-url02=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2Fe%2F2PACX-1vTglKQRXpkKSErDiWG6ycqEth32MY0reMuVGhaslImLjfuLU0EUgyyu2e-3vKDArjqGX7dXEBV8FJ4f%2Fpub%3Fgid%3D398158223%26single%3Dtrue%26output%3Dcsv&merge-keys02=%23adm1%2Bname&merge-tags02=%23country%2Bcode%2C%23region%2Bmain%2Bcode%2C%23region%2Bsub%2Bcode%2C%23region%2Bintermediate%2Bcode&merge-replace02=on&merge-overwrite02=on&filter03=explode&explode-header-att03=date&explode-value-att03=value&filter04=rename&rename-oldtag04=%23affected%2Bdate&rename-newtag04=%23date&rename-header04=Date&filter05=rename&rename-oldtag05=%23affected%2Bvalue&rename-newtag05=%23affected%2Binfected%2Bvalue%2Bnum&rename-header05=Value&filter06=clean&clean-date-tags06=%23date&filter07=sort&sort-tags07=%23date&sort-reverse07=on&filter08=sort&sort-tags08=%23country%2Bname%2C%23adm1%2Bname&tagger-match-all=on&tagger-default-tag=%23affected%2Blabel&tagger-01-header=province%2Fstate&tagger-01-tag=%23adm1%2Bname&tagger-02-header=country%2Fregion&tagger-02-tag=%23country%2Bname&tagger-03-header=lat&tagger-03-tag=%23geo%2Blat&tagger-04-header=long&tagger-04-tag=%23geo%2Blon&header-row=1&url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_recovered_global.csv"), comment.char= "#")
+
+```
+```{r}
+confirmed.global.narrow$Date = as.Date(confirmed.global.narrow$Date)
+cases.agg.a <- aggregate(Value ~ Country.Region + Date, confirmed.global.narrow , FUN = sum)  
+cases.agg <- cases.agg.a[order(cases.agg.a$Country.Region,cases.agg.a$Date),]
+
+deaths.global.narrow$Date = as.Date(deaths.global.narrow$Date)
+deaths.agg.a <- aggregate(Value ~ Country.Region + Date, deaths.global.narrow , FUN = sum)  
+deaths.agg <- deaths.agg.a[order(deaths.agg.a$Country.Region,deaths.agg.a$Date),]
+
+
+recovered.global.narrow$Date = as.Date(recovered.global.narrow$Date)
+recovered.agg.a <- aggregate(Value ~ Country.Region + Date, recovered.global.narrow , FUN = sum)  
+recovered.agg <- recovered.agg.a[order(recovered.agg.a$Country.Region,recovered.agg.a$Date),]
+
+cases.b <- confirmed.global.narrow %>%  group_by(Country.Region, Date) %>% summarise(Value = sum(Value)) %>% arrange(Country.Region, Date)
+deaths.b <- deaths.global.narrow %>%  group_by(Country.Region, Date) %>% summarise(Value = sum(Value)) %>% arrange(Country.Region, Date)
+recovered.b <- recovered.global.narrow %>%  group_by(Country.Region, Date) %>% summarise(Value = sum(Value)) %>% arrange(Country.Region, Date)
+
+
+all(cases.b==cases.agg)
+all(deaths.b==deaths.agg)
+all(recovered.b==recovered.agg)
+
+
+bydate.c <- cases.agg[which(cases.agg$Date=='2020-03-31'),] 
+bydate.d <- deaths.agg[which(deaths.agg$Date=='2020-03-31'),]
+bydate.r <- recovered.agg[which(recovered.agg$Date=='2020-03-31'),]
+
+
+table.j <- left_join(bydate.c, bydate.d, 'Country.Region')
+table.jp2 <- left_join(table.j, bydate.r, 'Country.Region')
+
+
+data <- table.jp2 %>% select(Country.Region, Value.x, Value.y, Value)
+names(data) <- c('Country.Region','cases','deaths','recoverd')
+data$sick <- data$cases - data$deaths - data$recoverd
+data.ord <- data %>% arrange(desc(cases))
+data.ord <- data.ord[1:10,]
+
+
+data.for.bar.p <-as.matrix(data.frame(sicks=data.ord$sick, deaths=data.ord$deaths, recoverd=data.ord$recoverd))
+rownames(data.for.bar.p) <- data.ord$Country.Region
+data.for.bar.p <-t(data.for.bar.p)
+barplot(data.for.bar.p, main = "Top10 countries with the most cases on 31.03.20",col = c("grey","darkorange","orange"),las=2)
+legend("topright",legend = c("sicks","deaths","recoverd"), fill = c("grey","darkorange","orange"))
+
+
+
+
+```
 
 <br/><br/>  
 
@@ -87,9 +142,73 @@ d. Plot the same graph as in (c), but this time plot the number of new cases on 
   
 **Solution:**    
 
-YOUR SOLUTION HERE.
-Use code blocks and markdown to clearly communicate your work.
 
+```{r}
+cases.agg <- cases.agg %>% arrange(Country.Region)
+deaths.agg <- deaths.agg %>% arrange(Country.Region)
+recovered.agg <- recovered.agg %>% arrange(Country.Region)
+
+
+diff_bydf<-function(data, Country.Region,Value){
+  all_cou=unique(data$Country.Region)
+  diff<-c()
+  for (cou in all_cou){
+    row.by.cou <- data[which(data$Country.Region==cou),]
+    v.of.cou <- row.by.cou$Value
+    diff <- c(diff,0)
+    for (i in 2:length(v.of.cou)){
+      gap <- v.of.cou[i]-v.of.cou[i-1]
+      diff <- c(diff, gap)
+    }
+  }
+  return(diff)}
+
+cases.agg$diff <- diff_bydf(cases.agg,Country.Region, Value)
+deaths.agg$diff <- diff_bydf(deaths.agg,Country.Region, Value)
+recovered.agg$diff <- diff_bydf(recovered.agg,Country.Region, Value)
+
+cases_ar <- cases.agg %>% arrange(desc(diff))
+cases_ar[1:10,]
+deaths_ar<-deaths.agg %>% arrange(desc(diff))
+deaths_ar[1:10,]
+
+italy.ca <- cases.agg[which(cases.agg$Country.Region=='Italy'),]
+italy.de <- deaths.agg[which(deaths.agg$Country.Region=='Italy'),]
+
+italy1 <- left_join(italy.ca, italy.de, by = 'Date')
+names(italy1) <- c('d','Date','Value.x','diff.cases','d3','Value.y','diff.deaths')
+italy <- italy1 %>% select(diff.cases, diff.deaths,Date)
+
+it<-as.matrix(data.frame(A=italy$diff.cases,B=italy$diff.deaths))
+colnames(it) <- c('diff-cases','diff-deaths')
+rownames(it) <- as.Date(italy$Date)
+bar_it <-t(it)
+barplot(bar_it, main = "cases & deaths - COVid19 - Italy - 1/20-4/20",col = c("gray","orange"),las=2,names.arg=format.Date(italy$Date), cex.names = 0.5)
+legend("topright",legend = c("no.cases","no.deaths"),fill = c("gray","orange"))
+
+log.p<-function(p){
+  n<-c()
+  for (i in 1:length(p)){
+    if (p[i]<1){
+      n<-c(n,0)
+    }else{
+      n<-c(n,log2(p[i]))
+    }
+  }
+  return(n)}
+
+
+case<-log.p(italy$diff.cases)
+deth<-log.p(italy$diff.deaths)
+it1<-as.matrix(data.frame(A=case,B=deth))
+colnames(it1) <- c('diff.cases','diff.deaths')
+rownames(it1) <- as.Date(italy$Date)
+t1 <-t(it1)
+barplot(t1, main = "cases & deaths - COVid19 - Italy - 1/20-4/20 - log.scale",col = c("gray","orange"),las=2,names.arg=format.Date(italy$Date),cex.names = 0.5)
+legend("topright",legend = c("cases-log.scale","deaths-log.scale"),fill = c("gray","orange"))
+
+
+```
 <br/><br/>
 
 
